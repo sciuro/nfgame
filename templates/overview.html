@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>Overview</h1>
+  <a href='{{ url_for('new_user') }}'>New user</a><br>
+  <a href='{{ url_for('delete_score') }}'>Delete score</a></br>
+  <a href='{{ url_for('delete_user') }}'>Delete user</a></br>
+  <table border=1>
+    <tr>
+      <td>Name</td>
+      {% for tag in tags %}
+      <td>{{ tags.get(tag) }}</td>
+      {% endfor %}
+    </tr>
+    {% for entry in entries %}
+    <tr>
+      <td>{{ entry.username }}</td>
+      {% for tag in tags %}
+      <td>{{ user[entry.id][tag] }}</td>
+      {% endfor %}
+    {% endfor %}
+    </tr>
+  </table>
+
+{% endblock %}
+

@@ -1,0 +1,9 @@
+# All the tags and there human readable name
+TAGS = {'taghash1': 'tree',
+        'taghash2': 'toilet',
+        'taghash3': 'tent',
+        'taghash4': 'water tap'
+       }
+
+# For storing the cookie information to the client
+SECRET_KEY = 'Very secret key!'

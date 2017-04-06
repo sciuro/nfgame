@@ -1,0 +1,8 @@
+# Ignoring compiled python code
+*.py[cod]
+
+# Ignoring the config file's
+*.cfg
+
+# Ignoring the database
+*.db
