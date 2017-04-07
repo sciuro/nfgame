@@ -18,8 +18,8 @@ You can install this as root by doing the following:
 Watch out! Raspbian has an old version of flask! (0.10) A raspberry is perfect
 for running this game, but install pip and use pip to install Flask.
 
-apt-get install python-pip
-pip install Flask
+    apt-get install python-pip
+    pip install Flask
 
 ### Getting the software
 Just clone the software from github:
