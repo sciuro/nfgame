@@ -17,7 +17,8 @@ app.config.update(dict(
             'taghash3': 'tagname3',
             'taghash4': 'tagname4'
            },
-    SECRET_KEY = 'Very secret key!'
+    SECRET_KEY = 'Very secret key!',
+    ADMIN_PASSWORD = 'changeme!'
 ))
 app.config.from_envvar('NFGAME_SETTINGS', silent=True)
 app.secret_key = app.config['SECRET_KEY']
@@ -57,7 +58,7 @@ def close_db(error):
 @app.route('/')
 def index():
     db = get_db()
-    cur = db.execute('select * from score')
+    cur = db.execute('select * from score order by username')
     entries = cur.fetchall()
 
     user = {}
@@ -95,21 +96,31 @@ def new_user():
     entries = cur.fetchall()
     session['id'] = entries[0]['id']
 
-    return render_template('newuser_done.html')
+    if not 'tag' in session:
+        return render_template('newuser_done.html')
+    else:
+        return redirect(url_for('tag_found', taghash=session['tag']))
 
 @app.route('/tag/<string:taghash>')
 def tag_found(taghash):
+    session.pop('tag', None)
+    
     if not 'id' in session:
+        session['tag'] = taghash
         return redirect(url_for('new_user'))
 
     tags = app.config['TAGS']
 
     if not tags.has_key(taghash):
-        return render_template('tagnotfound.html')
+        return render_template('tagnotfound.html', color='#FF9999')
 
     db = get_db()
     cur = db.execute('select * from score where id = ?', [session['id']])
     entries = cur.fetchall()
+    
+    if not entries:
+        session['tag'] = taghash
+        return redirect(url_for('new_user'))
 
     cur_score = entries[0]['tags']
     if cur_score == None:
@@ -118,7 +129,7 @@ def tag_found(taghash):
         found_tags = cur_score.split(',')
         for found_tag in found_tags:
             if taghash == found_tag:
-                return render_template('tagalreadyfound.html', tagname=tags.get(taghash))
+                return render_template('tagalreadyfound.html', tagname=tags.get(taghash), color='#FFFF80')
                 break
 
         cur_score = cur_score + "," + taghash
@@ -127,22 +138,29 @@ def tag_found(taghash):
     cur = db.execute('update score set tags = ? where id = ?', [cur_score, session['id']])
     db.commit()
 
-    return render_template('tagfound.html', tagname=tags.get(taghash))
+    return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00')
 
+@app.route('/admin/<string:password>')
+def admin_page(password):
+    if password == app.config['ADMIN_PASSWORD']:
+        return render_template('admin_page.html')
+    else:
+        return redirect(url_for('index'))
+    
 @app.route('/deletescore')
 def delete_score():
     db = get_db()
     cur = db.execute("delete from score")
     db.commit()
-
-    return redirect(url_for('index'))
+    
+    return render_template('admin_page.html')
 
 @app.route('/deleteuser')
 def delete_user():
     session.pop('username', None)
     session.pop('id', None)
 
-    return redirect(url_for('index'))
+    return render_template('admin_page.html')
 
 if __name__ == '__main__':
     app.run()

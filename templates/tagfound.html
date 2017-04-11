@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
+  <center>
   <h1>Found tag!</h1>
-  You found tag {{ tagname }}!
-  <a href='{{ url_for('index') }}'>Back to overview</a>
+  You found tag: {{ tagname }}!<br>
+  <span uk-icon="icon: happy; ratio: 2"></span>
+  </center>
 {% endblock %}
 

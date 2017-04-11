@@ -33,6 +33,7 @@ You can always update the software by running:
 
 ### Configure the software
 Copy the file nfgame.cfg-example to nfgame.cfg and edit to your preferences.
+Please change the password!
 
     cp nfgame.cfg-example nfgame.cfg
 
@@ -40,6 +41,7 @@ Copy the file nfgame.cfg-example to nfgame.cfg and edit to your preferences.
     ./run.sh
 
 The site is running on http://1.2.3.4:5000
+You can find the administator page for cleaning the database on http://1.2.3.4:5000/admin/password
 
 ## Debug mode
 You can enable the debug mode by running:

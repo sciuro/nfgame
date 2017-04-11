@@ -7,3 +7,5 @@ TAGS = {'taghash1': 'tree',
 
 # For storing the cookie information to the client
 SECRET_KEY = 'Very secret key!'
+
+ADMIN_PASSWORD = 'changeme!'

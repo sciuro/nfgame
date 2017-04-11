@@ -1,12 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
+  <center>
   <form action="{{ url_for('new_user') }}" method=post>
     <dl>
-      <dt>Username:
+      <dt>We don't know you!
+      <dd>Choose a name:
       <dd><input type=text name=username>
       <dd><input type=submit value=Submit>
     </dl>
   </form>
+  </center>
 {% endblock %}
 
 

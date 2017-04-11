@@ -1,25 +1,39 @@
-{% extends "layout.html" %}
+{% extends "layout-overview.html" %}
 {% block body %}
-  <h1>Overview</h1>
-  <a href='{{ url_for('new_user') }}'>New user</a><br>
-  <a href='{{ url_for('delete_score') }}'>Delete score</a></br>
-  <a href='{{ url_for('delete_user') }}'>Delete user</a></br>
-  <table border=1>
-    <tr>
-      <td>Name</td>
-      {% for tag in tags %}
-      <td>{{ tags.get(tag) }}</td>
-      {% endfor %}
-    </tr>
-    {% for entry in entries %}
-    <tr>
-      <td>{{ entry.username }}</td>
-      {% for tag in tags %}
-      <td>{{ user[entry.id][tag] }}</td>
-      {% endfor %}
-    {% endfor %}
-    </tr>
-  </table>
+  <h1 class="uk-heading-primary uk-text-center uk-heading-divider">Scoreboard</h1>
+  
+  <center>
+    <div class="uk-text-large uk-align-center">
 
+    <table class="uk-table uk-align-center">
+      <caption></caption>
+      <thead>
+        <tr>
+          <td>Name</td>
+          {% for tag in tags %}
+          <td>{{ tags.get(tag) }}</td>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr>
+          <td>{{ entry.username }}</td>
+          {% for tag in tags %}
+          <td>
+            {% if user[entry.id][tag] == 'Found' %}
+	    <span uk-icon="icon: check; ratio: 2" class="uk-label-success"></span>
+	    {% else %}
+            <span uk-icon="icon: close; ratio: 2" class="uk-label-danger"></span>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    </div>
+  </center>
 {% endblock %}
 
