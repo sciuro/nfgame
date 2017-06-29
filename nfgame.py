@@ -195,4 +195,4 @@ def delete_user():
     return render_template('admin_page.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)

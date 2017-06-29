@@ -6,3 +6,9 @@
 
 # Ignoring the database
 *.db
+
+# Ignoring logfiles
+*.log
+
+# Ignoring PID files
+*.pid
