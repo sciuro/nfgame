@@ -11,6 +11,9 @@ TAGS = {'taghash1': 'tree',
 # START_KEY = 'secretstartkey'
 START_KEY = 'None
 
+# Max time of the game in seconds
+MAX_TIME = '3600'
+
 # HTML text for the registration page:
 REGISTRATION_DESK = 'You can find the registration desk in the center.'
 
