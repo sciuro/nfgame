@@ -4,5 +4,6 @@ create table score (
   username text not null,
   tags text null,
   starttime text not null,
-  lasttime text null
+  lasttime text null,
+  duration text null
 );

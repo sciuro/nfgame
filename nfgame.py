@@ -60,11 +60,10 @@ def close_db(error):
 @app.route('/')
 def index():
     db = get_db()
-    cur = db.execute('select * from score order by username')
+    cur = db.execute('select * from score order by duration asc')
     entries = cur.fetchall()
 
     user = {}
-    time = {}
     tags = app.config['TAGS']
 
     for entry in entries:
@@ -75,23 +74,13 @@ def index():
 
         user[entry['id']] = {}
 
-        if not entry['lasttime'] == None:
-            starttime = datetime.strptime(entry['starttime'], "%Y-%m-%d %H:%M:%S")
-            lasttime = datetime.strptime(entry['lasttime'], "%Y-%m-%d %H:%M:%S")
-            
-            timediff = lasttime - starttime
-            hours = timediff.seconds / 3600
-            minutes = (timediff.seconds - (hours * 3600)) / 60
-            seconds = timediff.seconds - (minutes * 60)
-            time[entry['id']] = str(hours) + ":" + str(minutes) + ":" + str(seconds)
-
         for tag in tags:
             user[entry['id']][tag] = 'Not'
             for found_tag in found_tags:
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, time=time)
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user)
 
 @app.route('/newuser/', methods=['GET', 'POST'])
 @app.route('/newuser/<string:newhash>/', methods=['GET', 'POST'])
@@ -106,8 +95,12 @@ def new_user(newhash='None'):
       return render_template('newuser.html', newhash=newhash)
 
     """Now we got a POST request"""
+
+    now = datetime.now()
+    time = datetime.strptime((str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)), "%Y-%m-%d %H:%M:%S")
+
     db = get_db()
-    cur = db.execute("insert into score (username,starttime) values (?, datetime())", [request.form['username']])
+    cur = db.execute("insert into score (username,starttime,duration) values (?, ?, ?)", [request.form['username'], time, '99:99:99'])
     db.commit()
     session['username'] = request.form['username']
 
@@ -158,8 +151,19 @@ def tag_found(taghash):
 
         cur_score = cur_score + "," + taghash
 
+    '''Calculate duration'''
+    starttime = datetime.strptime(entries[0]['starttime'], "%Y-%m-%d %H:%M:%S")
+    now = datetime.now()
+    lasttime = datetime.strptime((str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)), "%Y-%m-%d %H:%M:%S")
+
+    timediff = lasttime - starttime
+    hours = timediff.seconds / 3600
+    minutes = (timediff.seconds - (hours * 3600)) / 60
+    seconds = timediff.seconds - (minutes * 60)
+    time = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+
     db = get_db()
-    cur = db.execute('update score set tags = ?, lasttime = datetime() where id = ?', [cur_score, session['id']])
+    cur = db.execute('update score set tags = ?, lasttime = datetime(), duration = ? where id = ?', [cur_score, time, session['id']])
     db.commit()
 
     return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00')
