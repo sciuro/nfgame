@@ -4,6 +4,7 @@ import sqlite3
 from flask import Flask, request, g, redirect, url_for, abort, \
      render_template, flash, session
 import random
+from datetime import datetime
 
 # create our little application :)
 app = Flask(__name__)
@@ -63,6 +64,7 @@ def index():
     entries = cur.fetchall()
 
     user = {}
+    time = {}
     tags = app.config['TAGS']
 
     for entry in entries:
@@ -72,13 +74,24 @@ def index():
             found_tags = entry['tags'].split(',')
 
         user[entry['id']] = {}
+
+        if not entry['lasttime'] == None:
+            starttime = datetime.strptime(entry['starttime'], "%Y-%m-%d %H:%M:%S")
+            lasttime = datetime.strptime(entry['lasttime'], "%Y-%m-%d %H:%M:%S")
+            
+            timediff = lasttime - starttime
+            hours = timediff.seconds / 3600
+            minutes = (timediff.seconds - (hours * 3600)) / 60
+            seconds = timediff.seconds - (minutes * 60)
+            time[entry['id']] = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+
         for tag in tags:
             user[entry['id']][tag] = 'Not'
             for found_tag in found_tags:
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user)
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, time=time)
 
 @app.route('/newuser/', methods=['GET', 'POST'])
 @app.route('/newuser/<string:newhash>/', methods=['GET', 'POST'])
@@ -94,7 +107,7 @@ def new_user(newhash='None'):
 
     """Now we got a POST request"""
     db = get_db()
-    cur = db.execute("insert into score (username) values (?)", [request.form['username']])
+    cur = db.execute("insert into score (username,starttime) values (?, datetime())", [request.form['username']])
     db.commit()
     session['username'] = request.form['username']
 
@@ -146,7 +159,7 @@ def tag_found(taghash):
         cur_score = cur_score + "," + taghash
 
     db = get_db()
-    cur = db.execute('update score set tags = ? where id = ?', [cur_score, session['id']])
+    cur = db.execute('update score set tags = ?, lasttime = datetime() where id = ?', [cur_score, session['id']])
     db.commit()
 
     return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00')

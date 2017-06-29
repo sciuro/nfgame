@@ -13,6 +13,7 @@
           {% for tag in tags %}
           <td>{{ tags.get(tag) }}</td>
           {% endfor %}
+          <td>Duration</td>
         </tr>
       </thead>
       <tbody>
@@ -28,6 +29,9 @@
             {% endif %}
           </td>
           {% endfor %}
+          <td>
+            {{ time[entry.id]  }}
+          </td>
         </tr>
         {% endfor %}
       </tbody>
