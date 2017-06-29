@@ -19,6 +19,7 @@ app.config.update(dict(
             'taghash4': 'tagname4'
            },
     START_KEY = 'None',
+    MAX_TIME = '3600',
     SECRET_KEY = 'Very secret key!',
     ADMIN_PASSWORD = 'changeme!'
 ))
@@ -161,6 +162,9 @@ def tag_found(taghash):
     minutes = (timediff.seconds - (hours * 3600)) / 60
     seconds = timediff.seconds - (minutes * 60)
     time = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+
+    if int(timediff.seconds) > int(app.config['MAX_TIME']):
+        return render_template('timeout.html', color='#FF9999')
 
     db = get_db()
     cur = db.execute('update score set tags = ?, lasttime = datetime(), duration = ? where id = ?', [cur_score, time, session['id']])
