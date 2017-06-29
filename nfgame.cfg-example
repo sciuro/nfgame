@@ -5,6 +5,15 @@ TAGS = {'taghash1': 'tree',
         'taghash4': 'water tap'
        }
 
+# Key for starting as a new user.
+# http://<server>/newuser/<key>
+# If not used, please use 'None'.
+# START_KEY = 'secretstartkey'
+START_KEY = 'None
+
+# HTML text for the registration page:
+REGISTRATION_DESK = 'You can find the registration desk in the center.'
+
 # For storing the cookie information to the client
 SECRET_KEY = 'Very secret key!'
 

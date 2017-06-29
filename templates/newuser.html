@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
   <center>
-  <form action="{{ url_for('new_user') }}" method=post>
+  <form action="{{ url_for('new_user') }}{{ newhash  }}/" method=post>
     <dl>
       <dt>We don't know you!
       <dd>Choose a name:

@@ -17,6 +17,7 @@ app.config.update(dict(
             'taghash3': 'tagname3',
             'taghash4': 'tagname4'
            },
+    START_KEY = 'None',
     SECRET_KEY = 'Very secret key!',
     ADMIN_PASSWORD = 'changeme!'
 ))
@@ -79,11 +80,17 @@ def index():
 
     return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user)
 
-@app.route('/newuser', methods=['GET', 'POST'])
-def new_user():
+@app.route('/newuser/', methods=['GET', 'POST'])
+@app.route('/newuser/<string:newhash>/', methods=['GET', 'POST'])
+def new_user(newhash='None'):
+    """Check if there is a key to the new user"""
+    if not app.config['START_KEY'] == 'None':
+        if not newhash == app.config['START_KEY']:
+            return redirect(url_for('index'))
+
     """If it's a GET request, no new user should be made"""
     if request.method == 'GET':
-      return render_template('newuser.html')
+      return render_template('newuser.html', newhash=newhash)
 
     """Now we got a POST request"""
     db = get_db()
@@ -106,8 +113,12 @@ def tag_found(taghash):
     session.pop('tag', None)
     
     if not 'id' in session:
-        session['tag'] = taghash
-        return redirect(url_for('new_user'))
+        '''If a user does not require central registration show new user form'''
+        if app.config['START_KEY'] == 'None':
+            session['tag'] = taghash
+            return redirect(url_for('new_user'))
+        else:
+            return render_template('gotoregistration.html', registration=app.config['REGISTRATION_DESK'], color='#FF9999')
 
     tags = app.config['TAGS']
 
