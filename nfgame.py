@@ -85,7 +85,41 @@ def index():
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user)
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players')
+
+@app.route('/highscores')
+def highscores():
+    tagquery = ""
+    for tag in app.config['TAGS']:
+        if tagquery == "":
+            tagquery = 'where tags like "%' + tag + '%"'
+        else:
+            tagquery = tagquery + ' and tags like "%' + tag + '%"'
+
+    print(tagquery)
+
+    db = get_db()
+    cur = db.execute('select * from score ' + tagquery + ' order by duration asc')
+    entries = cur.fetchall()
+
+    user = {}
+    tags = app.config['TAGS']
+
+    for entry in entries:
+        if entry['tags'] == None:
+            found_tags = []
+        else:
+            found_tags = entry['tags'].split(',')
+
+        user[entry['id']] = {}
+
+        for tag in tags:
+            user[entry['id']][tag] = 'Not'
+            for found_tag in found_tags:
+                if found_tag == tag:
+                    user[entry['id']][tag] = 'Found'
+
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Highscores')
 
 @app.route('/newuser/', methods=['GET', 'POST'])
 @app.route('/newuser/<string:newhash>/', methods=['GET', 'POST'])
