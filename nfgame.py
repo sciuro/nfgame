@@ -98,8 +98,6 @@ def highscores():
         else:
             tagquery = tagquery + ' and tags like "%' + tag + '%"'
 
-    print(tagquery)
-
     db = get_db()
     cur = db.execute('select * from score ' + tagquery + ' order by duration asc')
     entries = cur.fetchall()
