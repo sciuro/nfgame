@@ -30,7 +30,11 @@
           </td>
           {% endfor %}
           <td>
+            {% if entry.duration == '99:99:99' %}
+            No time yet
+            {% else %}
             {{ entry.duration }}
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
