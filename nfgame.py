@@ -4,7 +4,7 @@ import sqlite3
 from flask import Flask, request, g, redirect, url_for, abort, \
      render_template, flash, session
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # create our little application :)
 app = Flask(__name__)
@@ -60,8 +60,12 @@ def close_db(error):
 
 @app.route('/')
 def index():
+    """Calculate starttime"""
+    now = datetime.now() - timedelta(seconds=int(app.config['MAX_TIME']))
+    maxstarttime = datetime.strptime((str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)), "%Y-%m-%d %H:%M:%S")
+
     db = get_db()
-    cur = db.execute('select * from score order by duration asc')
+    cur = db.execute('select * from score where starttime > ? order by duration asc', [maxstarttime])
     entries = cur.fetchall()
 
     user = {}
