@@ -21,6 +21,7 @@ app.config.update(dict(
     START_KEY = 'None',
     MAX_TIME = '3600',
     SHOW_TIME = '120',
+    REFRESH_TIME = '10',
     SECRET_KEY = 'Very secret key!',
     ADMIN_PASSWORD = 'changeme!'
 ))
@@ -86,7 +87,7 @@ def index():
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players')
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players', refresh=app.config['REFRESH_TIME'])
 
 @app.route('/highscores')
 def highscores():
@@ -120,7 +121,7 @@ def highscores():
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Highscores')
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Highscores', refresh=app.config['REFRESH_TIME'])
 
 @app.route('/newuser/', methods=['GET', 'POST'])
 @app.route('/newuser/<string:newhash>/', methods=['GET', 'POST'])

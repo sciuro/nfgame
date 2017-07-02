@@ -17,6 +17,9 @@ MAX_TIME = '3600'
 # Time the players will be shown on the overview after there playtime is over
 SHOW_TIME = '120'
 
+# Refresh time for the scoreboard and highscore pages
+REFRESH_TIME = '10'
+
 # HTML text for the registration page:
 REGISTRATION_DESK = 'You can find the registration desk in the center.'
 
