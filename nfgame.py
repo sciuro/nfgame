@@ -186,18 +186,6 @@ def tag_found(taghash):
         session['tag'] = taghash
         return redirect(url_for('new_user'))
 
-    cur_score = entries[0]['tags']
-    if cur_score == None:
-        cur_score = taghash
-    else:
-        found_tags = cur_score.split(',')
-        for found_tag in found_tags:
-            if taghash == found_tag:
-                return render_template('tagalreadyfound.html', tagname=tags.get(taghash), color='#FFFF80')
-                break
-
-        cur_score = cur_score + "," + taghash
-
     '''Calculate duration'''
     starttime = datetime.strptime(entries[0]['starttime'], "%Y-%m-%d %H:%M:%S")
     now = datetime.now()
@@ -212,11 +200,35 @@ def tag_found(taghash):
     if int(timediff.seconds) > int(app.config['MAX_TIME']):
         return render_template('timeout.html', color='#FF9999')
 
+    '''Calculate time remaining'''
+    endtime = starttime + timedelta(seconds=int(app.config['MAX_TIME']))
+    playtime = endtime - now
+    hours = playtime.seconds / 3600
+    minutes = (playtime.seconds - (hours * 3600)) / 60
+    seconds = playtime.seconds - (minutes * 60)
+    if len(str(minutes)) == 1:
+        minutes = '0' + str(minutes)
+    if len(str(seconds)) == 1:
+        seconds = '0' + str(seconds)
+    timeremaining = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+
+    cur_score = entries[0]['tags']
+    if cur_score == None:
+        cur_score = taghash
+    else:
+        found_tags = cur_score.split(',')
+        for found_tag in found_tags:
+            if taghash == found_tag:
+                return render_template('tagalreadyfound.html', tagname=tags.get(taghash), color='#FFFF80', time=timeremaining)
+                break
+
+        cur_score = cur_score + "," + taghash
+
     db = get_db()
     cur = db.execute('update score set tags = ?, lasttime = datetime(), duration = ? where id = ?', [cur_score, time, session['id']])
     db.commit()
 
-    return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00')
+    return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00', time=timeremaining)
 
 @app.route('/admin/<string:password>')
 def admin_page(password):
