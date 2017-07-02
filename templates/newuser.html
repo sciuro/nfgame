@@ -3,7 +3,12 @@
   <center>
   <form action="{{ url_for('new_user') }}{{ newhash  }}/" method=post>
     <dl>
-      <dt>We don't know you!
+      <dt>
+      {% if msg %}
+      <font color="red"> {{ msg }} </font>
+      {% else %}
+      We don't know you!
+      {% endif %}
       <dd>Choose a name:
       <dd><input type=text name=username>
       <dd><input type=submit value=Submit>

@@ -100,6 +100,14 @@ def new_user(newhash='None'):
     now = datetime.now()
     time = datetime.strptime((str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)), "%Y-%m-%d %H:%M:%S")
 
+    """Check for unique username"""
+    db = get_db()
+    cur = db.execute('select count(username) as count from score where username = ? COLLATE NOCASE', [request.form['username']])
+    usercount = cur.fetchone()
+
+    if not usercount['count'] == 0:
+        return render_template('newuser.html', newhash=newhash, msg='Username already taken!')
+
     db = get_db()
     cur = db.execute("insert into score (username,starttime,duration) values (?, ?, ?)", [request.form['username'], time, '99:99:99'])
     db.commit()
