@@ -195,6 +195,10 @@ def tag_found(taghash):
     hours = timediff.seconds / 3600
     minutes = (timediff.seconds - (hours * 3600)) / 60
     seconds = timediff.seconds - (minutes * 60)
+    if len(str(minutes)) == 1:
+        minutes = '0' + str(minutes)
+    if len(str(seconds)) == 1:
+        seconds = '0' + str(seconds)
     time = str(hours) + ":" + str(minutes) + ":" + str(seconds)
 
     if int(timediff.seconds) > int(app.config['MAX_TIME']):
