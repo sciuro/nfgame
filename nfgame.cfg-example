@@ -24,11 +24,3 @@ REGISTRATION_DESK = 'You can find the registration desk in the center.'
 SECRET_KEY = 'Very secret key!'
 
 ADMIN_PASSWORD = 'changeme!'
-
-
-# All the tags and there human readable name
-TAGS = {'taghash1': 'boom',
-        'taghash2': 'toilet',
-        'taghash3': 'tent',
-        'taghash4': 'water tap'
-       }
