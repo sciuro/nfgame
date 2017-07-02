@@ -14,6 +14,9 @@ START_KEY = 'None
 # Max time of the game in seconds
 MAX_TIME = '3600'
 
+# Time the players will be shown on the overview after there playtime is over
+SHOW_TIME = '120'
+
 # HTML text for the registration page:
 REGISTRATION_DESK = 'You can find the registration desk in the center.'
 
@@ -21,3 +24,11 @@ REGISTRATION_DESK = 'You can find the registration desk in the center.'
 SECRET_KEY = 'Very secret key!'
 
 ADMIN_PASSWORD = 'changeme!'
+
+
+# All the tags and there human readable name
+TAGS = {'taghash1': 'boom',
+        'taghash2': 'toilet',
+        'taghash3': 'tent',
+        'taghash4': 'water tap'
+       }

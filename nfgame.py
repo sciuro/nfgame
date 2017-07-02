@@ -20,6 +20,7 @@ app.config.update(dict(
            },
     START_KEY = 'None',
     MAX_TIME = '3600',
+    SHOW_TIME = '120',
     SECRET_KEY = 'Very secret key!',
     ADMIN_PASSWORD = 'changeme!'
 ))
@@ -61,7 +62,7 @@ def close_db(error):
 @app.route('/')
 def index():
     """Calculate starttime"""
-    now = datetime.now() - timedelta(seconds=int(app.config['MAX_TIME']))
+    now = datetime.now() - timedelta(seconds=int(app.config['MAX_TIME'])) - timedelta(seconds=int(app.config['SHOW_TIME']))
     maxstarttime = datetime.strptime((str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)), "%Y-%m-%d %H:%M:%S")
 
     db = get_db()
