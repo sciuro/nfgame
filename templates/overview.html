@@ -46,7 +46,11 @@
             {% endif %}
           </td>
           <td>
+            {% if tagcount[entry.id] == tagcount['total'] %}
+            Finished!
+            {% else %}
             {{ timeremaining[entry.id] }}
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
