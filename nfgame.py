@@ -72,6 +72,7 @@ def index():
 
     user = {}
     tags = app.config['TAGS']
+    timeremaining = {}
 
     for entry in entries:
         if entry['tags'] == None:
@@ -87,7 +88,23 @@ def index():
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players', refresh=app.config['REFRESH_TIME'])
+        '''Calculate time remaining'''
+        starttime = datetime.strptime(entry['starttime'], "%Y-%m-%d %H:%M:%S")
+        endtime = starttime + timedelta(seconds=int(app.config['MAX_TIME']))
+        playtime = endtime - datetime.now()
+        if datetime.now() > endtime:
+            timeremaining[entry['id']] = "Time's up"
+        else:
+            hours = playtime.seconds / 3600
+            minutes = (playtime.seconds - (hours * 3600)) / 60
+            seconds = playtime.seconds - (minutes * 60)
+            if len(str(minutes)) == 1:
+                minutes = '0' + str(minutes)
+            if len(str(seconds)) == 1:
+                seconds = '0' + str(seconds)
+            timeremaining[entry['id']] = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players', refresh=app.config['REFRESH_TIME'], timeremaining=timeremaining)
 
 @app.route('/highscores')
 def highscores():
@@ -119,7 +136,7 @@ def highscores():
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Highscores', refresh=app.config['REFRESH_TIME'])
+    return render_template('highscores.html', entries=entries, tags=app.config['TAGS'], user=user, type='Highscores', refresh=app.config['REFRESH_TIME'])
 
 @app.route('/newuser/', methods=['GET', 'POST'])
 @app.route('/newuser/<string:newhash>/', methods=['GET', 'POST'])

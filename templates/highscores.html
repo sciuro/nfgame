@@ -10,35 +10,19 @@
       <thead>
         <tr>
           <td>Name</td>
-          {% for tag in tags %}
-          <td>{{ tags.get(tag) }}</td>
-          {% endfor %}
           <td>Duration</td>
-          <td>Time remaining</td>
         </tr>
       </thead>
       <tbody>
         {% for entry in entries %}
         <tr>
           <td>{{ entry.username }}</td>
-          {% for tag in tags %}
-          <td>
-            {% if user[entry.id][tag] == 'Found' %}
-	    <span uk-icon="icon: check; ratio: 2" class="uk-label-success"></span>
-	    {% else %}
-            <span uk-icon="icon: close; ratio: 2" class="uk-label-danger"></span>
-            {% endif %}
-          </td>
-          {% endfor %}
           <td>
             {% if entry.duration == '99:99:99' %}
             No time yet
             {% else %}
             {{ entry.duration }}
             {% endif %}
-          </td>
-          <td>
-            {{ timeremaining[entry.id] }}
           </td>
         </tr>
         {% endfor %}
