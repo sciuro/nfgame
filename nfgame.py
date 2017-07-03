@@ -249,7 +249,22 @@ def tag_found(taghash):
     cur = db.execute('update score set tags = ?, lasttime = datetime(), duration = ? where id = ?', [cur_score, time, session['id']])
     db.commit()
 
-    return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00', time=timeremaining)
+    '''Check if this was the user his last item'''
+    tagquery = ""
+    for tag in app.config['TAGS']:
+        if tagquery == "":
+            tagquery = 'where tags like "%' + tag + '%"'
+        else:
+            tagquery = tagquery + ' and tags like "%' + tag + '%"'
+
+    db = get_db()
+    cur = db.execute('select * from score ' + tagquery + ' and id = ?', [session['id']])
+    entries = cur.fetchall()
+
+    if entries:
+        return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00', time=timeremaining, endgame='yes')
+    else:
+        return render_template('tagfound.html', tagname=tags.get(taghash), color='#00FF00', time=timeremaining, endgame='no')
 
 @app.route('/admin/<string:password>')
 def admin_page(password):

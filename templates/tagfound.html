@@ -4,7 +4,12 @@
   <h1>Found tag!</h1>
   You found tag: {{ tagname }}!<br>
   <span uk-icon="icon: happy; ratio: 2"></span><br>
+  {% if endgame == 'yes' %}
+  Good job! You got all the tags!<br>
+  Return to the the registration desk.
+  {% else %}
   Time left to play: {{ time }}
+  {% endif %}
   </center>
 {% endblock %}
 
