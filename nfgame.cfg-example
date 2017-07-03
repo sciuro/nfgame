@@ -20,6 +20,10 @@ SHOW_TIME = '120'
 # Refresh time for the scoreboard and highscore pages
 REFRESH_TIME = '10'
 
+# Shortview. If you got to many tags on the score board, show only the amount
+# of tags the player has scored.
+SHORT_VIEW = 'false'
+
 # HTML text for the registration page:
 REGISTRATION_DESK = 'You can find the registration desk in the center.'
 

@@ -22,6 +22,7 @@ app.config.update(dict(
     MAX_TIME = '3600',
     SHOW_TIME = '120',
     REFRESH_TIME = '10',
+    SHORT_VIEW = 'false',
     SECRET_KEY = 'Very secret key!',
     ADMIN_PASSWORD = 'changeme!'
 ))
@@ -73,6 +74,8 @@ def index():
     user = {}
     tags = app.config['TAGS']
     timeremaining = {}
+    tagcount = {}
+    tagcount['total'] = len(tags)
 
     for entry in entries:
         if entry['tags'] == None:
@@ -81,12 +84,16 @@ def index():
             found_tags = entry['tags'].split(',')
 
         user[entry['id']] = {}
+        counter = 0
 
         for tag in tags:
             user[entry['id']][tag] = 'Not'
             for found_tag in found_tags:
                 if found_tag == tag:
                     user[entry['id']][tag] = 'Found'
+                    counter = counter + 1
+
+        tagcount[entry['id']] = counter
 
         '''Calculate time remaining'''
         starttime = datetime.strptime(entry['starttime'], "%Y-%m-%d %H:%M:%S")
@@ -104,7 +111,7 @@ def index():
                 seconds = '0' + str(seconds)
             timeremaining[entry['id']] = str(hours) + ":" + str(minutes) + ":" + str(seconds)
 
-    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players', refresh=app.config['REFRESH_TIME'], timeremaining=timeremaining)
+    return render_template('overview.html', entries=entries, tags=app.config['TAGS'], user=user, type='Current players', refresh=app.config['REFRESH_TIME'], timeremaining=timeremaining, shortview=app.config['SHORT_VIEW'], tagcount=tagcount)
 
 @app.route('/highscores')
 def highscores():

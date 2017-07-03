@@ -10,9 +10,13 @@
       <thead>
         <tr>
           <td>Name</td>
+          {% if shortview == 'true' %}
+          <td>Found</td>
+          {% else %}
           {% for tag in tags %}
           <td>{{ tags.get(tag) }}</td>
           {% endfor %}
+          {% endif %}
           <td>Duration</td>
           <td>Time remaining</td>
         </tr>
@@ -21,6 +25,9 @@
         {% for entry in entries %}
         <tr>
           <td>{{ entry.username }}</td>
+          {% if shortview == 'true' %}
+          <td>{{ tagcount[entry.id] }}</td>
+          {% else %}
           {% for tag in tags %}
           <td>
             {% if user[entry.id][tag] == 'Found' %}
@@ -30,6 +37,7 @@
             {% endif %}
           </td>
           {% endfor %}
+          {% endif %}
           <td>
             {% if entry.duration == '99:99:99' %}
             No time yet
