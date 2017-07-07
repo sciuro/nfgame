@@ -45,6 +45,7 @@ Please change the password!
 The site is running on http://1.2.3.4:5000
 
 These are all the URL's used in the game:
+
 | URL                | Description                                           |
 |--------------------|-------------------------------------------------------|
 | /                  | Switch between the scoreboard and the highscores page |
