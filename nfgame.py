@@ -63,6 +63,19 @@ def close_db(error):
 
 @app.route('/')
 def index():
+    '''Check if user is returning'''
+    if not 'board' in session:
+        session['board'] = 'scoreboard'
+
+    if session['board'] == 'scoreboard':
+        session['board'] = 'highscores'
+        return scoreboard()
+    elif session['board'] == 'highscores':
+        session['board'] = 'scoreboard'
+        return highscores()
+
+@app.route('/scoreboard')
+def scoreboard():
     """Calculate starttime"""
     now = datetime.now() - timedelta(seconds=int(app.config['MAX_TIME'])) - timedelta(seconds=int(app.config['SHOW_TIME']))
     maxstarttime = datetime.strptime((str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)), "%Y-%m-%d %H:%M:%S")
