@@ -289,24 +289,21 @@ def tag_found(taghash):
 @app.route('/admin/<string:password>')
 def admin_page(password):
     if password == app.config['ADMIN_PASSWORD']:
+        session['admin'] = 'true'
         return render_template('admin_page.html')
     else:
         return redirect(url_for('index'))
     
 @app.route('/deletescore')
 def delete_score():
-    db = get_db()
-    cur = db.execute("delete from score")
-    db.commit()
+    if 'admin' in session and session['admin'] == 'true':
+        db = get_db()
+        cur = db.execute("delete from score")
+        db.commit()
     
-    return render_template('admin_page.html')
-
-@app.route('/deleteuser')
-def delete_user():
-    session.pop('username', None)
-    session.pop('id', None)
-
-    return render_template('admin_page.html')
+        return render_template('admin_page.html')
+    else:
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(threaded=True)
