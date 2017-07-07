@@ -52,9 +52,9 @@ These are all the URL's used in the game:
 | /scoreboard        | Show the scoreboard                                   |
 | /highscores        | Show the highscores                                   |
 | /newuser           | Make a new user                                       |
-| /newuser/<hash>    | Make a new user. A hash is needed                     |
-| /tag/<hash>        | Find a tag and register it on your name               |
-| /admin/<password>  | Admin page                                            |
+| /newuser/hash      | Make a new user. A hash is needed                     |
+| /tag/hash          | Find a tag and register it on your name               |
+| /admin/password    | Admin page                                            |
 
 ## Debug mode
 You can enable the debug mode by running:
