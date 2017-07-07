@@ -41,8 +41,19 @@ Please change the password!
 ## Running the game
     ./run.sh start
 
+## URL's in the game
 The site is running on http://1.2.3.4:5000
-You can find the administator page for cleaning the database on http://1.2.3.4:5000/admin/password
+
+These are all the URL's used in the game:
+| URL                | Description                                           |
+|--------------------|-------------------------------------------------------|
+| /                  | Switch between the scoreboard and the highscores page |
+| /scoreboard        | Show the scoreboard                                   |
+| /highscores        | Show the highscores                                   |
+| /newuser           | Make a new user                                       |
+| /newuser/<hash>    | Make a new user. A hash is needed                     |
+| /tag/<hash>        | Find a tag and register it on your name               |
+| /admin/<password>  | Admin page                                            |
 
 ## Debug mode
 You can enable the debug mode by running:
