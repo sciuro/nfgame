@@ -1,4 +1,4 @@
-# All the tags and there human readable name
+# All the tags and their human readable name
 TAGS = {'taghash1': 'tree',
         'taghash2': 'toilet',
         'taghash3': 'tent',
@@ -14,13 +14,13 @@ START_KEY = 'None
 # Max time of the game in seconds
 MAX_TIME = '3600'
 
-# Time the players will be shown on the overview after there playtime is over
+# Time the players will be shown on the overview after their playtime is over
 SHOW_TIME = '120'
 
 # Refresh time for the scoreboard and highscore pages
 REFRESH_TIME = '10'
 
-# Shortview. If you got to many tags on the score board, show only the amount
+# Shortview. If you got too many tags on the score board, show only the amount
 # of tags the player has scored.
 SHORT_VIEW = 'false'
 
